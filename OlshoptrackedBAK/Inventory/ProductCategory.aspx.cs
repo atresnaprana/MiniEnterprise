@@ -19,7 +19,7 @@ using Telerik.Web.UI;
 
 namespace OlshoptrackedBAK.Inventory
 {
-    public partial class ProductInventory : System.Web.UI.Page
+    public partial class ProductCategory : System.Web.UI.Page
     {
         MySqlDataAdapter daCountry;
         DataSet dsCountry;
@@ -68,13 +68,13 @@ namespace OlshoptrackedBAK.Inventory
                 Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
 
-                string sql = @"SELECT A.PROD_ID, A.PROD_NAME, A.DESCRIPTION, A.PRICE, A.ENTRY_DATE, A.ENTRY_USER, A.UPDATE_DATE, A.UPDATE_USER, a.prod_cat_id, b.category_name FROM MT_PROD A LEFT JOIN mt_prod_cat B on a.prod_cat_id = b.id ORDER BY PROD_ID ASC";
+                string sql = @"SELECT id, category_name, amount, ENTRY_DATE, ENTRY_USER, UPDATE_DATE, UPDATE_USER FROM mt_prod_cat ORDER BY id ASC";
                 daCountry = new MySqlDataAdapter(sql, conn);
                 MySqlCommandBuilder cb = new MySqlCommandBuilder(daCountry);
                 dsCountry = new DataSet();
-                daCountry.Fill(dsCountry, "MT_PROD");
-                rgProduct.DataSource = dsCountry;
-                rgProduct.DataBind();
+                daCountry.Fill(dsCountry, "mt_prod_cat");
+                rgProdCat.DataSource = dsCountry;
+                rgProdCat.DataBind();
 
 
 
@@ -100,7 +100,7 @@ namespace OlshoptrackedBAK.Inventory
             Console.WriteLine("Done.");
 
         }
-        private void insert(Double price, string prodname, string description, string category)
+        private void insert(int amount, string catname)
         {
             string strConnString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
             Console.WriteLine(strConnString);
@@ -110,19 +110,16 @@ namespace OlshoptrackedBAK.Inventory
                 conn.Open();
                 //string SID = lblSID.Text;
                 //MySqlCommand cmd = new MySqlCommand("update student Set  Name = @Name, Address = @Address, Mobile = @Mobile, Email = @Email where SID = @SID", conn);
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO MT_PROD (PROD_NAME, DESCRIPTION, PRICE,UPDATE_DATE,UPDATE_USER, ENTRY_DATE, ENTRY_USER, prod_cat_id) VALUES (@prodname, @description, @price, @datetime, @user, @datetime, @user, @catid )", conn);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO mt_prod_cat (category_name, amount,UPDATE_DATE,UPDATE_USER, ENTRY_DATE, ENTRY_USER) VALUES (@catname, @amount, @datetime, @user, @datetime, @user)", conn);
 
-                cmd.Parameters.AddWithValue("@prodname", prodname);
+                cmd.Parameters.AddWithValue("@amount", amount);
 
-                cmd.Parameters.AddWithValue("@description", description);
-                cmd.Parameters.AddWithValue("@price", price);
+                cmd.Parameters.AddWithValue("@catname", catname);
 
                 cmd.Parameters.AddWithValue("@user", Session["id"].ToString());
 
                 cmd.Parameters.AddWithValue("@datetime", DateTime.Now);
-                cmd.Parameters.AddWithValue("@catid", category);
 
-                
                 cmd.ExecuteNonQuery();
                 cmd.Dispose();
                 LoadDataInNotification("Data Has been added", "Add Successful");
@@ -139,7 +136,7 @@ namespace OlshoptrackedBAK.Inventory
                 conn.Close();
             }
         }
-        private void update(string prodname, Double price, string description, string prodid, string category)
+        private void update(string catname, int amount, string id)
         {
             string strConnString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
             Console.WriteLine(strConnString);
@@ -148,15 +145,12 @@ namespace OlshoptrackedBAK.Inventory
             {
                 conn.Open();
                 //string SID = lblSID.Text;
-                MySqlCommand cmd = new MySqlCommand("update MT_PROD Set  PROD_NAME = @prodname, PRICE = @price, DESCRIPTION = @description ,UPDATE_DATE = @datetime, UPDATE_USER = @user, prod_cat_id = @catid where PROD_ID = @prodid", conn);
+                MySqlCommand cmd = new MySqlCommand("update mt_prod_cat Set category_name = @catname, amount = @amount, UPDATE_DATE = @datetime, UPDATE_USER = @user where id = @id", conn);
                 //MySqlCommand cmd = new MySqlCommand("INSERT INTO TRANSACTION_HDR (TRANS_CODE_HDR, TRANS_CODE_DESC, UPDATE_DATE) VALUES ('', @desc, @datetime )", conn);
 
-                cmd.Parameters.AddWithValue("@prodname", prodname);
-                cmd.Parameters.AddWithValue("@description", description);
-                cmd.Parameters.AddWithValue("@price", price);
-                cmd.Parameters.AddWithValue("@catid", category);
-                
-                cmd.Parameters.AddWithValue("@prodid", prodid);
+                cmd.Parameters.AddWithValue("@catname", catname);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@id", id);
                 cmd.Parameters.AddWithValue("@user", Session["id"].ToString());
 
                 cmd.Parameters.AddWithValue("@datetime", DateTime.Now);
@@ -186,7 +180,7 @@ namespace OlshoptrackedBAK.Inventory
             {
                 conn.Open();
                 //int SID = Convert.ToInt32(GridViewStudent.DataKeys[e.RowIndex].Value);
-                MySqlCommand cmd = new MySqlCommand("Delete From MT_PROD where PROD_ID = @code", conn);
+                MySqlCommand cmd = new MySqlCommand("Delete From mt_prod_cat where id = @code", conn);
                 cmd.Parameters.AddWithValue("@code", code);
 
                 cmd.ExecuteNonQuery();
@@ -203,7 +197,7 @@ namespace OlshoptrackedBAK.Inventory
                 conn.Close();
             }
         }
-        private DataTable validatetransaction(string prodcode)
+        private DataTable validatetransaction(string id)
         {
             string strConnString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
             Console.WriteLine(strConnString);
@@ -216,7 +210,7 @@ namespace OlshoptrackedBAK.Inventory
                 Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
 
-                string sql = @"SELECT PROD_ID FROM MT_TRANSACTION where PROD_ID = '" + prodcode + "'";
+                string sql = @"SELECT prod_cat_id FROM MT_PROD where prod_cat_id = '" + id + "'";
                 daCountry = new MySqlDataAdapter(sql, conn);
                 MySqlCommandBuilder cb = new MySqlCommandBuilder(daCountry);
                 dsCountry = new DataSet();
@@ -268,78 +262,7 @@ namespace OlshoptrackedBAK.Inventory
         #endregion crud
         protected void rgProduct_ItemDataBound(object sender, Telerik.Web.UI.GridItemEventArgs e)
         {
-            if (e.Item is GridEditableItem)
-            {
-                var item = e.Item as GridEditableItem;
-                var combobox = item.FindControl("RadCmbCatHdr") as RadComboBox;
-                string strConnString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
-                Console.WriteLine(strConnString);
-                MySqlConnection conn = new MySqlConnection(strConnString);
-                if (combobox != null)
-                {
-                    combobox.Filter = RadComboBoxFilter.Contains;
-
-                }
-
-                //string connStr = "server=localhost;user=root;database=world;port=3306;password=******";
-                try
-                {
-                    Console.WriteLine("Connecting to MySQL...");
-                    conn.Open();
-                    string sql = "SELECT id, CATEGORY_NAME FROM mt_prod_cat ORDER BY CATEGORY_NAME ASC";
-
-                    daCountry = new MySqlDataAdapter(sql, conn);
-                    MySqlCommandBuilder cb = new MySqlCommandBuilder(daCountry);
-                    dsCountry = new DataSet();
-                    daCountry.Fill(dsCountry, "CATEGORY_DATA");
-                    if (combobox != null)
-                    {
-                        combobox.DataSource = dsCountry;
-                        combobox.DataBind();
-                    }
-
-
-
-                    //MySqlCommand cmd = new MySqlCommand(sql, conn);
-                    //MySqlDataReader rdr = cmd.ExecuteReader();
-                    /* conn.Open();
-
-                string sql = "INSERT INTO Country (Name, HeadOfState, Continent) VALUES ('Disneyland','Mickey Mouse', 'North America')";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                cmd.ExecuteNonQuery();*/
-                    /*while (rdr.Read())
-                    {
-                        Console.WriteLine(rdr[0] + " -- " + rdr[1]);
-                    }
-                    rdr.Close();*/
-                }
-                catch (Exception ex)
-                {
-                    //ShowMessage("Error: " + ex.Message);
-                }
-
-                conn.Close();
-                Console.WriteLine("Done.");
-
-            }
-            if (e.Item.IsInEditMode && hdfdataoperation.Value == "Edit")
-            {
-                var items = e.Item as GridEditableItem;
-                if (items != null)
-                {
-                    var combobox = items.FindControl("RadCmbCatHdr") as RadComboBox;
-
-                    string val = items.GetDataKeyValue("prod_cat_id").ToString();
-                    combobox.SelectedValue = val;
-                    if (combobox != null)
-                    {
-                        combobox.Filter = RadComboBoxFilter.Contains;
-
-                    }
-
-                }
-
-            }
+            
         }
 
         protected void rgProduct_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
@@ -390,59 +313,34 @@ namespace OlshoptrackedBAK.Inventory
             {
                 Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
-                string sql = @"SELECT A.PROD_ID, A.PROD_NAME, A.DESCRIPTION, A.PRICE, A.ENTRY_DATE, A.ENTRY_USER, A.UPDATE_DATE, A.UPDATE_USER, a.prod_cat_id, b.category_name FROM MT_PROD A LEFT JOIN mt_prod_cat B on a.prod_cat_id = b.id WhERE 1=1" + Environment.NewLine;
 
-                //string sql = @"SELECT PROD_ID, PROD_NAME, DESCRIPTION, PRICE, ENTRY_DATE, ENTRY_USER, UPDATE_DATE, UPDATE_USER FROM MT_PROD WhERE 1=1 " + Environment.NewLine;
+                string sql = @"SELECT id, category_name, amount, ENTRY_DATE, ENTRY_USER, UPDATE_DATE, UPDATE_USER FROM mt_prod_cat WhERE 1=1 " + Environment.NewLine;
                 if (isFilter == "true")
                 {
-                    if (columnName == "PROD_ID")
+                    if (columnName == "id")
                     {
-                        sql += "AND A.PROD_ID = " + filterValue + "" + Environment.NewLine;
+                        sql += "AND id = " + filterValue + "" + Environment.NewLine;
 
                     }
-                    if (columnName == "PROD_NAME")
+                    if (columnName == "category_name")
                     {
-                        sql += "AND A.PROD_NAME LIKE '%" + filterValue + "%'" + Environment.NewLine;
+                        sql += "AND category_name LIKE '%" + filterValue + "%'" + Environment.NewLine;
 
                     }
-                    if (columnName == "DESCRIPTION")
+                    if (columnName == "amount")
                     {
-                        sql += "AND A.DESCRIPTION LIKE '%" + filterValue + "%'" + Environment.NewLine;
-
-                    }
-                    if (columnName == "PRICE")
-                    {
-                        sql += "AND A.PRICE = " + filterValue + "" + Environment.NewLine;
-
-                    }
-                    if (columnName == "CATEGORY_NAME")
-                    {
-                        sql += "AND A.CATEGORY_NAME = " + filterValue + "" + Environment.NewLine;
+                        sql += "AND amount = " + filterValue + "" + Environment.NewLine;
 
                     }
 
                 }
-                sql += "ORDER BY A.PROD_ID ASC";
+                sql += "ORDER BY id ASC";
                 daCountry = new MySqlDataAdapter(sql, conn);
                 MySqlCommandBuilder cb = new MySqlCommandBuilder(daCountry);
                 dsCountry = new DataSet();
-                daCountry.Fill(dsCountry, "MT_PROD");
-                rgProduct.DataSource = dsCountry;
+                daCountry.Fill(dsCountry, "mt_prod_cat");
+                rgProdCat.DataSource = dsCountry;
 
-
-
-                //MySqlCommand cmd = new MySqlCommand(sql, conn);
-                //MySqlDataReader rdr = cmd.ExecuteReader();
-                /* conn.Open();
-
-            string sql = "INSERT INTO Country (Name, HeadOfState, Continent) VALUES ('Disneyland','Mickey Mouse', 'North America')";
-            MySqlCommand cmd = new MySqlCommand(sql, conn);
-            cmd.ExecuteNonQuery();*/
-                /*while (rdr.Read())
-                {
-                    Console.WriteLine(rdr[0] + " -- " + rdr[1]);
-                }
-                rdr.Close();*/
             }
             catch (Exception ex)
             {
@@ -463,20 +361,17 @@ namespace OlshoptrackedBAK.Inventory
             GridEditableItem item = (GridEditableItem)e.Item;
             RadTextBox code = (RadTextBox)item.FindControl("hdrcodetxt");
 
-            RadTextBox prodname = (RadTextBox)item.FindControl("prodname");
-            RadTextBox description = (RadTextBox)item.FindControl("description");
-            RadNumericTextBox price = (RadNumericTextBox)item.FindControl("price");
-            RadComboBox categoryDt = (RadComboBox)item.FindControl("RadCmbCatHdr");
+            RadTextBox catnames = (RadTextBox)item.FindControl("catname");
+            RadNumericTextBox amount = (RadNumericTextBox)item.FindControl("amt");
 
 
-            string prodcode = code.Text;
-            string prodnames = prodname.Text;
-            string descriptions = description.Text;
-            Double prices = Convert.ToDouble(price.Text);
-            string category = categoryDt.SelectedValue;
-            if (prodnames == "")
+            string id = code.Text;
+            string catname = catnames.Text;
+            int amounts = Convert.ToInt32(amount.Text);
+
+            if (string.IsNullOrEmpty(catname))
             {
-                ShowMessage("Product Name Cannot be empty");
+                ShowMessage("Category Name Cannot be empty");
                 return;
             }
             /*var validateprodcode = validatetransaction(prodcode);
@@ -485,12 +380,12 @@ namespace OlshoptrackedBAK.Inventory
                 ShowMessage("already used in transaction");
                 return;
             }*/
-            if (prices == 0)
+            if (amounts == 0)
             {
-                ShowMessage("Please fill price");
+                ShowMessage("Please fill amount");
                 return;
             }
-            update(prodnames,prices,descriptions,prodcode, category);
+            update(catname,amounts,id);
         }
 
         protected void rgProduct_PreRender(object sender, EventArgs e)
@@ -500,12 +395,12 @@ namespace OlshoptrackedBAK.Inventory
 
         protected void rgProduct_DeleteCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
         {
-            var code = ((HiddenField)rgProduct.MasterTableView.Items[e.Item.ItemIndex]["PROD_ID"].FindControl("hiddencode"));
+            var code = ((HiddenField)rgProdCat.MasterTableView.Items[e.Item.ItemIndex]["id"].FindControl("hiddencode"));
             string codetxt = code.Value;
             var validateprodcode = validatetransaction(codetxt);
             if (validateprodcode.Rows.Count > 0)
             {
-                ShowMessage("already used in transaction");
+                ShowMessage("already used in product");
                 return;
             }
             delete(codetxt);
@@ -513,32 +408,24 @@ namespace OlshoptrackedBAK.Inventory
 
         protected void rgProduct_InsertCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
         {
-            var name = ((RadTextBox)rgProduct.MasterTableView.GetInsertItem().FindControl("prodname"));
+            var name = ((RadTextBox)rgProdCat.MasterTableView.GetInsertItem().FindControl("catname"));
 
-            var description = ((RadTextBox)rgProduct.MasterTableView.GetInsertItem().FindControl("description"));
-
-            var price = ((RadNumericTextBox)rgProduct.MasterTableView.GetInsertItem().FindControl("price"));
-            var categoryDt = ((RadComboBox)rgProduct.MasterTableView.GetInsertItem().FindControl("RadCmbCatHdr"));
+            var amount = ((RadNumericTextBox)rgProdCat.MasterTableView.GetInsertItem().FindControl("amt"));
 
             string names = name.Text;
-            string descriptions = description.Text;
-            Double prices = Convert.ToDouble(price.Text);
-            string category = categoryDt.SelectedValue;
-            if (names == "")
-            {
-                ShowMessage("Product Name Cannot be empty");
-                return;
-            }
-            if (prices == 0)
-            {
-                ShowMessage("Price Cannot be empty");
-                return;
-            }
-           
-            
-         
+            int amounts = Convert.ToInt32(amount.Text);
 
-            insert(prices,names, descriptions, category);
+            if (string.IsNullOrEmpty(names))
+            {
+                ShowMessage("Category Name Cannot be empty");
+                return;
+            }
+            if (amounts == 0)
+            {
+                ShowMessage("Amount Cannot be empty");
+                return;
+            }
+            insert(amounts,names);
         }
 
         protected void rgProduct_PageIndexChanged(object sender, Telerik.Web.UI.GridPageChangedEventArgs e)

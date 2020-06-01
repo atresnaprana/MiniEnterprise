@@ -1,16 +1,16 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ProductInventory.aspx.cs" Inherits="OlshoptrackedBAK.Inventory.ProductInventory" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ProductCategory.aspx.cs" Inherits="OlshoptrackedBAK.Inventory.ProductCategory" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <telerik:RadLabel runat="server" ID="lblTitle" Text="Menu List" Font-Size="X-Large" Font-Bold="true"></telerik:RadLabel>
-    <telerik:RadLabel runat="server" ID="RadLabel1" Text="Customer Information" Font-Size="X-Large" Font-Bold="true"></telerik:RadLabel>
+    <telerik:RadLabel runat="server" ID="lblTitle" Text="Product Category" Font-Size="X-Large" Font-Bold="true"></telerik:RadLabel>
+<%--    <telerik:RadLabel runat="server" ID="RadLabel1" Text="Customer Information" Font-Size="X-Large" Font-Bold="true"></telerik:RadLabel>--%>
     <br />
     <telerik:RadButton ID="Filter" runat="server" Font-Names="Verdana" GroupName="Toggle" ToggleType="CheckBox" ButtonType="ToggleButton" Text="Show Filter" OnClientClicked="OnGridCreated" AutoPostBack="false"></telerik:RadButton>
     <telerik:RadAjaxPanel ID="ajaxpanel" runat="server">
         <br />
 
-        <telerik:RadGrid ID="rgProduct" ExportSettings-Pdf-AllowPrinting="true" runat="server" Height="750px"
+        <telerik:RadGrid ID="rgProdCat" ExportSettings-Pdf-AllowPrinting="true" runat="server" Height="750px"
             AllowPaging="True" AutoGenerateColumns="False" CellSpacing="0"
             AllowFilteringByColumn="True" PageSize="5" AllowSorting="True" Style="margin-top: 0"
             OnItemCommand="rgProduct_ItemCommand" OnItemDataBound="rgProduct_ItemDataBound" OnNeedDataSource="rgProduct_NeedDataSource"
@@ -26,8 +26,8 @@
                 <ClientEvents OnGridCreated="OnGridCreated" />
                 <Scrolling AllowScroll="true" UseStaticHeaders="true" ScrollHeight="430px" />
             </ClientSettings>
-            <MasterTableView AllowFilteringByColumn="true" CommandItemDisplay="Top" DataKeyNames="PROD_ID,prod_cat_id"
-                PagerStyle-Mode="NextPrevAndNumeric" ClientDataKeyNames="PROD_ID,prod_cat_id" Width="150%">
+            <MasterTableView AllowFilteringByColumn="true" CommandItemDisplay="Top" DataKeyNames="id"
+                PagerStyle-Mode="NextPrevAndNumeric" ClientDataKeyNames="id" Width="150%">
                 <CommandItemSettings AddNewRecordText="Add Record" ShowRefreshButton="true" />
                 <RowIndicatorColumn FilterControlAltText="Filter RowIndicator column">
                 </RowIndicatorColumn>
@@ -42,13 +42,13 @@
 
 
                     <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
-                        HeaderText="Code" UniqueName="PROD_ID" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
+                        HeaderText="Code" UniqueName="id" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
                         <ItemTemplate>
-                            <asp:Label ID="hdrcodetxt" Width="90%" runat="server" Text='<%# Eval("PROD_ID") %>'></asp:Label>
-                            <asp:HiddenField ID="hiddencode" Value='<%# Eval("PROD_ID") %>' runat="server" />
+                            <asp:Label ID="hdrcodetxt" Width="90%" runat="server" Text='<%# Eval("id") %>'></asp:Label>
+                            <asp:HiddenField ID="hiddencode" Value='<%# Eval("id") %>' runat="server" />
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <telerik:RadTextBox ID="hdrcodetxt" Text='<%# Eval("PROD_ID") %>' ReadOnly="true" runat="server"></telerik:RadTextBox>
+                            <telerik:RadTextBox ID="hdrcodetxt" Text='<%# Eval("id") %>' ReadOnly="true" runat="server"></telerik:RadTextBox>
                         </EditItemTemplate>
                         <InsertItemTemplate>
                             <asp:Label ID="hdrcodetxt" Text="#####" runat="server"></asp:Label>
@@ -57,62 +57,35 @@
                         <ItemStyle HorizontalAlign="Left" Width="12%" />
                     </telerik:GridTemplateColumn>
                     <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
-                        HeaderText="Product Name" UniqueName="PROD_NAME" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
+                        HeaderText="Category Name" UniqueName="category_name" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
                         <ItemTemplate>
-                            <asp:Label ID="prodname" Width="90%" runat="server" Text='<%# Eval("PROD_NAME") %>'></asp:Label>
+                            <asp:Label ID="catname" Width="90%" runat="server" Text='<%# Eval("category_name") %>'></asp:Label>
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <telerik:RadTextBox ID="prodname" Text='<%# Eval("PROD_NAME") %>' runat="server"></telerik:RadTextBox>
+                            <telerik:RadTextBox ID="catname" Text='<%# Eval("category_name") %>' runat="server"></telerik:RadTextBox>
                         </EditItemTemplate>
                         <InsertItemTemplate>
-                            <telerik:RadTextBox ID="prodname" runat="server"></telerik:RadTextBox>
+                            <telerik:RadTextBox ID="catname" runat="server"></telerik:RadTextBox>
                         </InsertItemTemplate>
                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="13%" />
                         <ItemStyle HorizontalAlign="Left" Width="13%" />
                     </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
-                        HeaderText="Product Description" UniqueName="DESCRIPTION" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
+                     <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
+                        HeaderText="Amount" UniqueName="amount" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
                         <ItemTemplate>
-                            <asp:Label ID="description" Width="90%" runat="server" Text='<%# Eval("DESCRIPTION") %>'></asp:Label>
+                            <asp:Label ID="amt" Width="90%" runat="server" Text='<%# Eval("amount") %>'></asp:Label>
                         </ItemTemplate>
                         <EditItemTemplate>
-                            <telerik:RadTextBox ID="description" Text='<%# Eval("DESCRIPTION") %>' TextMode="MultiLine" runat="server"></telerik:RadTextBox>
+                            <telerik:RadNumericTextBox ID="amt" runat="server" Text='<%# Eval("amount") %>'></telerik:RadNumericTextBox>
                         </EditItemTemplate>
                         <InsertItemTemplate>
-                            <telerik:RadTextBox ID="description" runat="server" TextMode="MultiLine"></telerik:RadTextBox>
-                        </InsertItemTemplate>
-                        <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="13%" />
-                        <ItemStyle HorizontalAlign="Left" Width="13%" />
-                    </telerik:GridTemplateColumn>
-                    <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
-                        HeaderText="Price" UniqueName="PRICE" FilterControlWidth="100%" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana">
-                        <ItemTemplate>
-                            <asp:Label ID="price" Width="90%" runat="server" Text='<%# Eval("PRICE") %>'></asp:Label>
-                        </ItemTemplate>
-                        <EditItemTemplate>
-                            <telerik:RadNumericTextBox ID="price" runat="server" Text='<%# Eval("PRICE") %>'></telerik:RadNumericTextBox>
-                        </EditItemTemplate>
-                        <InsertItemTemplate>
-                            <telerik:RadNumericTextBox ID="price" runat="server"></telerik:RadNumericTextBox>
+                            <telerik:RadNumericTextBox ID="amt" runat="server"></telerik:RadNumericTextBox>
                         </InsertItemTemplate>
                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="100px" />
                         <ItemStyle HorizontalAlign="Left" Width="100px" />
                     </telerik:GridTemplateColumn>
-                      <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
-                        HeaderText="Category" UniqueName="CATEGORY_NAME" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains">
-                        <ItemTemplate>
-                            <asp:Label ID="hdrcustcode" Width="90%" runat="server" Text='<%# Eval("CATEGORY_NAME") %>'></asp:Label>
-                        </ItemTemplate>
-                        <EditItemTemplate>
-                            <telerik:RadComboBox ID="RadCmbCatHdr" Width="150px" AllowCustomText="true" AutoPostBack="False" runat="server" EmptyMessage="Select.." DataTextField="CATEGORY_NAME" DataValueField="id">
-                            </telerik:RadComboBox>
-                        </EditItemTemplate>
-                        <InsertItemTemplate>
-                            <telerik:RadComboBox ID="RadCmbCatHdr" Width="150px" AutoPostBack="False" runat="server" EmptyMessage="Select.." DataTextField="CATEGORY_NAME" DataValueField="id"></telerik:RadComboBox>
-                        </InsertItemTemplate>
-                        <HeaderStyle Wrap="false" HorizontalAlign="Center" Width="10%" />
-                        <ItemStyle HorizontalAlign="Center" Width="10%" />
-                    </telerik:GridTemplateColumn>
+                  
+
                     <telerik:GridBoundColumn AllowFiltering="false" DataField="ENTRY_DATE" HeaderText="Update On" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana" UniqueName="ENTRY_DATE" DataFormatString="{0:dd-MMM-yyyy}" ReadOnly="true">
                         <HeaderStyle Width="120px" Wrap="false" HorizontalAlign="Left" />
                         <ItemStyle Width="120px" HorizontalAlign="Left" />
@@ -171,12 +144,12 @@
          <script>
              function HideFilter() {
                  console.log("hide")
-                 window.$find('<%=rgProduct.ClientID %>').get_masterTableView().hideFilterItem();
+                 window.$find('<%=rgProdCat.ClientID %>').get_masterTableView().hideFilterItem();
              }
 
              function ShowFilter() {
                  console.log("show")
-                 window.$find('<%=rgProduct.ClientID %>').get_masterTableView().showFilterItem();
+                 window.$find('<%=rgProdCat.ClientID %>').get_masterTableView().showFilterItem();
              }
              function OnGridCreated() {
                  var btn1 = window.$find("<%=Filter.ClientID %>");
@@ -209,3 +182,4 @@
     </telerik:RadScriptBlock>
    
 </asp:Content>
+

@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>F:\PUBLISHAPP\MiniEnterprise</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\inetpub\wwwroot\MiniEnterprise</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="About.aspx">
@@ -178,10 +178,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/03/2014 20:33:56</publishTime>
     </File>
     <File Include="bin/OlshoptrackedBAK.dll">
-      <publishTime>04/24/2020 00:03:46</publishTime>
+      <publishTime>06/01/2020 11:37:37</publishTime>
     </File>
     <File Include="bin/OlshoptrackedBAK.pdb">
-      <publishTime>04/24/2020 00:03:46</publishTime>
+      <publishTime>06/01/2020 11:37:37</publishTime>
     </File>
     <File Include="bin/Owin.dll">
       <publishTime>11/27/2012 13:00:52</publishTime>
@@ -384,8 +384,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Home.aspx">
       <publishTime>11/05/2019 20:06:46</publishTime>
     </File>
+    <File Include="Inventory/ProductCategory.aspx">
+      <publishTime>05/29/2020 22:05:22</publishTime>
+    </File>
     <File Include="Inventory/ProductInventory.aspx">
-      <publishTime>11/26/2019 20:31:55</publishTime>
+      <publishTime>05/31/2020 14:49:16</publishTime>
     </File>
     <File Include="Inventory/ShoppingList.aspx">
       <publishTime>10/03/2019 20:34:15</publishTime>
@@ -511,7 +514,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/30/2017 23:41:03</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>03/31/2020 21:21:36</publishTime>
+      <publishTime>05/29/2020 21:58:27</publishTime>
     </File>
     <File Include="Site.Mobile.Master">
       <publishTime>11/30/2017 23:41:06</publishTime>
@@ -538,7 +541,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/30/2017 23:41:06</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/03/2019 20:57:09</publishTime>
+      <publishTime>06/01/2020 11:32:15</publishTime>
     </File>
   </ItemGroup>
 </Project>

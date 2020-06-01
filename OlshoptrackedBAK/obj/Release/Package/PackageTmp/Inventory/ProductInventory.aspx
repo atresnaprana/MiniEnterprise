@@ -26,8 +26,8 @@
                 <ClientEvents OnGridCreated="OnGridCreated" />
                 <Scrolling AllowScroll="true" UseStaticHeaders="true" ScrollHeight="430px" />
             </ClientSettings>
-            <MasterTableView AllowFilteringByColumn="true" CommandItemDisplay="Top" DataKeyNames="PROD_ID"
-                PagerStyle-Mode="NextPrevAndNumeric" ClientDataKeyNames="PROD_ID" Width="150%">
+            <MasterTableView AllowFilteringByColumn="true" CommandItemDisplay="Top" DataKeyNames="PROD_ID,prod_cat_id"
+                PagerStyle-Mode="NextPrevAndNumeric" ClientDataKeyNames="PROD_ID,prod_cat_id" Width="150%">
                 <CommandItemSettings AddNewRecordText="Add Record" ShowRefreshButton="true" />
                 <RowIndicatorColumn FilterControlAltText="Filter RowIndicator column">
                 </RowIndicatorColumn>
@@ -98,7 +98,21 @@
                         <HeaderStyle Wrap="false" HorizontalAlign="Left" Width="100px" />
                         <ItemStyle HorizontalAlign="Left" Width="100px" />
                     </telerik:GridTemplateColumn>
-
+                      <telerik:GridTemplateColumn AllowFiltering="true" FilterControlAltText="Filter TemplateColumn column"
+                        HeaderText="Category" UniqueName="CATEGORY_NAME" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana" ShowFilterIcon="false" AutoPostBackOnFilter="true" AndCurrentFilterFunction="Contains">
+                        <ItemTemplate>
+                            <asp:Label ID="hdrcustcode" Width="90%" runat="server" Text='<%# Eval("CATEGORY_NAME") %>'></asp:Label>
+                        </ItemTemplate>
+                        <EditItemTemplate>
+                            <telerik:RadComboBox ID="RadCmbCatHdr" Width="150px" AllowCustomText="true" AutoPostBack="False" runat="server" EmptyMessage="Select.." DataTextField="CATEGORY_NAME" DataValueField="id">
+                            </telerik:RadComboBox>
+                        </EditItemTemplate>
+                        <InsertItemTemplate>
+                            <telerik:RadComboBox ID="RadCmbCatHdr" Width="150px" AutoPostBack="False" runat="server" EmptyMessage="Select.." DataTextField="CATEGORY_NAME" DataValueField="id"></telerik:RadComboBox>
+                        </InsertItemTemplate>
+                        <HeaderStyle Wrap="false" HorizontalAlign="Center" Width="10%" />
+                        <ItemStyle HorizontalAlign="Center" Width="10%" />
+                    </telerik:GridTemplateColumn>
                     <telerik:GridBoundColumn AllowFiltering="false" DataField="ENTRY_DATE" HeaderText="Update On" HeaderStyle-Font-Size="13px" HeaderStyle-Font-Names="Verdana" UniqueName="ENTRY_DATE" DataFormatString="{0:dd-MMM-yyyy}" ReadOnly="true">
                         <HeaderStyle Width="120px" Wrap="false" HorizontalAlign="Left" />
                         <ItemStyle Width="120px" HorizontalAlign="Left" />

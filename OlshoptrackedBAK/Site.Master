@@ -114,6 +114,9 @@
                                                  <telerik:NavigationNode Text="Product List" NavigateUrl="~/Inventory/ProductInventory.aspx">
                                                   
                                                 </telerik:NavigationNode>
+                                                   <telerik:NavigationNode Text="Product Category List" NavigateUrl="~/Inventory/ProductCategory.aspx">
+                                                  
+                                                </telerik:NavigationNode>
                                              
                                             </Nodes>
                                         </telerik:NavigationNode>
