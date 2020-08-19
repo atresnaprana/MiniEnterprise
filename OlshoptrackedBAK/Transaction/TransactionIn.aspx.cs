@@ -322,16 +322,24 @@ namespace OlshoptrackedBAK.Transaction
                     MySqlCommandBuilder cb = new MySqlCommandBuilder(daCountry);
                     dsCountry = new DataSet();
                     daCountry.Fill(dsCountry, "CUST_DATA");
-                    custcombobox.DataSource = dsCountry;
-                    custcombobox.DataBind();
+                    if(custcombobox != null)
+                    {
+                        custcombobox.DataSource = dsCountry;
+                        custcombobox.DataBind();
+                    }
+                   
 
 
                     string sql2 = "SELECT PROD_ID, PROD_NAME FROM MT_PROD ORDER BY PROD_NAME ASC";
                     var courieradp = new MySqlDataAdapter(sql2, conn);
                     var courierdt = new DataSet();
                     courieradp.Fill(courierdt, "COURIER_DATA");
-                    prodcombobox.DataSource = courierdt;
-                    prodcombobox.DataBind();
+                    if(prodcombobox != null)
+                    {
+                        prodcombobox.DataSource = courierdt;
+                        prodcombobox.DataBind();
+                    }
+                    
 
                     //MySqlCommand cmd = new MySqlCommand(sql, conn);
                     //MySqlDataReader rdr = cmd.ExecuteReader();

@@ -169,20 +169,22 @@ namespace OlshoptrackedBAK
                 Console.WriteLine("Connecting to MySQL...");
                 conn.Open();
 
-                string sql = @"SELECT B.PROD_ID,
-	                               C.PROD_NAME,
+                string sql = @"SELECT C.prod_cat_id AS PROD_ID,
+                                    D.category_name AS PROD_NAME,   
                                    SUM(A.AMOUNT) as TOTAL,
                                    COUNT(B.PROD_ID) as TOTAL2
                             FROM MT_TRANSDET A LEFT JOIN 
-                            MT_TRANSACTION B ON A.TRANS_ID = B.TRANS_ID LEFT JOIN MT_PROD C ON B.PROD_ID = C.PROD_ID WHERE C.PROD_ID IS NOT NULL AND C.PROD_ID <> 38 AND c.PROD_ID <> 37" + Environment.NewLine;
+                            MT_TRANSACTION B ON A.TRANS_ID = B.TRANS_ID LEFT JOIN MT_PROD C ON B.PROD_ID = C.PROD_ID 
+                            LEFT JOIN mt_prod_cat D on c.prod_cat_id = d.id
+                            WHERE C.PROD_ID IS NOT NULL AND C.PROD_ID <> 38 AND c.PROD_ID <> 37" + Environment.NewLine;
                 if (!string.IsNullOrEmpty(date))
                 {
                     sql += @"AND year(B.TRANS_DATE) = year('" + date +"')" +Environment.NewLine;
                     sql += @"AND month(B.TRANS_DATE) = month('" + date + "')" + Environment.NewLine;
 
                 }
-                sql +=@"           GROUP BY B.PROD_ID, C.PROD_NAME
-                            ORDER BY TOTAL2 DESC, C.PROD_NAME ASC LIMIT " + range;
+                sql += @"           GROUP BY C.prod_cat_id, D.category_name
+                            ORDER BY TOTAL2 DESC, D.category_name ASC LIMIT " + range;
                 var dtprofit = new MySqlDataAdapter(sql, conn);
                 MySqlCommandBuilder cb = new MySqlCommandBuilder(dtprofit);
                 var dsprofit = new DataSet();

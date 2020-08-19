@@ -302,6 +302,7 @@
     <Content Include="Inventory\ProductInventory.aspx" />
     <Content Include="MasterCIty.aspx" />
     <Content Include="NotAuthorized.aspx" />
+    <Content Include="Reports\BonReport.aspx" />
     <Content Include="Reports\RptGojekCust.aspx" />
     <Content Include="Reports\RptTest.aspx" />
     <Content Include="Reports\RptTransInView.aspx" />
@@ -581,6 +582,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Reports\BonReport.aspx.cs">
+      <DependentUpon>BonReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\BonReport.aspx.designer.cs">
+      <DependentUpon>BonReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\LabelRpt.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -723,7 +731,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
+      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

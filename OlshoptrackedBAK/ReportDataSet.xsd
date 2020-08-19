@@ -130,6 +130,18 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="BonDt" msprop:Generator_TableClassName="BonDtDataTable" msprop:Generator_TableVarName="tableBonDt" msprop:Generator_RowChangedName="BonDtRowChanged" msprop:Generator_TablePropName="BonDt" msprop:Generator_RowDeletingName="BonDtRowDeleting" msprop:Generator_RowChangingName="BonDtRowChanging" msprop:Generator_RowEvHandlerName="BonDtRowChangeEventHandler" msprop:Generator_RowDeletedName="BonDtRowDeleted" msprop:Generator_RowClassName="BonDtRow" msprop:Generator_UserTableName="BonDt" msprop:Generator_RowEvArgName="BonDtRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="PIN" msprop:Generator_ColumnVarNameInTable="columnPIN" msprop:Generator_ColumnPropNameInRow="PIN" msprop:Generator_ColumnPropNameInTable="PINColumn" msprop:Generator_UserColumnName="PIN" type="xs:string" minOccurs="0" />
+              <xs:element name="TRANS_DATE" msprop:Generator_ColumnVarNameInTable="columnTRANS_DATE" msprop:Generator_ColumnPropNameInRow="TRANS_DATE" msprop:Generator_ColumnPropNameInTable="TRANS_DATEColumn" msprop:Generator_UserColumnName="TRANS_DATE" type="xs:string" minOccurs="0" />
+              <xs:element name="PRODUCT_NAME" msprop:Generator_ColumnVarNameInTable="columnPRODUCT_NAME" msprop:Generator_ColumnPropNameInRow="PRODUCT_NAME" msprop:Generator_ColumnPropNameInTable="PRODUCT_NAMEColumn" msprop:Generator_UserColumnName="PRODUCT_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="AMOUNT" msprop:Generator_ColumnVarNameInTable="columnAMOUNT" msprop:Generator_ColumnPropNameInRow="AMOUNT" msprop:Generator_ColumnPropNameInTable="AMOUNTColumn" msprop:Generator_UserColumnName="AMOUNT" type="xs:double" minOccurs="0" />
+              <xs:element name="CUST_NAME" msprop:Generator_ColumnVarNameInTable="columnCUST_NAME" msprop:Generator_ColumnPropNameInRow="CUST_NAME" msprop:Generator_ColumnPropNameInTable="CUST_NAMEColumn" msprop:Generator_UserColumnName="CUST_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="Jml" msprop:Generator_ColumnVarNameInTable="columnJml" msprop:Generator_ColumnPropNameInRow="Jml" msprop:Generator_ColumnPropNameInTable="JmlColumn" msprop:Generator_UserColumnName="Jml" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

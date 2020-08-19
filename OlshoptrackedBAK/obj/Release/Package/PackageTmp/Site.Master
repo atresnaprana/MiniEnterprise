@@ -140,6 +140,9 @@
                                               <telerik:NavigationNode Text="Customer Report" NavigateUrl="~/Reports/RptGojekCust.aspx">
                                                     
                                                 </telerik:NavigationNode>
+                                                 <telerik:NavigationNode Text="Bon Print" NavigateUrl="~/Reports/BonReport.aspx">
+                                                    
+                                                </telerik:NavigationNode>
                                             </Nodes>
                                         </telerik:NavigationNode>
                                         <telerik:NavigationNode Text="User Control" NavigateUrl="~/usercontrol.aspx"></telerik:NavigationNode>
